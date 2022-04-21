@@ -1,0 +1,28 @@
+{
+  "name": "askfm-clone",
+  "version": "1.0.0",
+  "description": "AskFM Clone",
+  "main": "index.js",
+  "scripts": {
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start-client": "cd client && npm run start",
+    "start-server": "cd server && npm run start",
+    "start": "npm run build && concurrently \"npm run start-server\" \"npm run start-client\""
+  },
+  "keywords": [
+    "mern",
+    "typescript",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "Mahmoud Bekheet",
+  "license": "BSD 3-Clause",
+  "devDependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
