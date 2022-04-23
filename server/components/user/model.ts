@@ -6,8 +6,15 @@ const UserSchema: Schema = new Schema({
     type: String,
     required: true,
     trim: true,
+    min: 5,
   },
   email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  username: {
     type: String,
     required: true,
     trim: true,
@@ -16,6 +23,7 @@ const UserSchema: Schema = new Schema({
   password: {
     type: String,
     required: true,
+    min: 8,
   },
   metaData: {
     coins: Number,
@@ -43,4 +51,12 @@ const UserSchema: Schema = new Schema({
   },
 });
 
-export const User = mongoose.model<IUser>('User', UserSchema);
+// remove password from response
+UserSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    delete ret.password;
+    return ret;
+  },
+});
+
+export const User: Model<IUser> = mongoose.model('User', UserSchema);

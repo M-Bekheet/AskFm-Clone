@@ -4,6 +4,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  username: string;
   questions?: IQuestion[];
   followers?: IUser[];
   following?: IUser[];

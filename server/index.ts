@@ -2,14 +2,30 @@ import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { logger, loggerMdl } from './utils/logger';
+const session = require('express-session');
+import { loggerMdl } from './utils';
+import userRouter from './components/user/router';
 
 dotenv.config();
-import './config/db';
 
+/*
+ * Config: DB
+ */
+import './config';
+
+const {
+  NODE_ENV = 'development',
+  PORT = 8080,
+  SESS_SECRET,
+  SESS_LIFETIME = 1000 * 60 * 60 * 24, // default: 1 day
+} = process.env;
+
+const IN_PROD = NODE_ENV === 'production';
 const app: Express = express();
-const port = process.env.PORT || 8080;
 
+/*
+ * Middleware
+ */
 app.use(cors());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -18,16 +34,27 @@ app.use(bodyParser.json());
 // log all requests
 app.use(loggerMdl);
 
-app.get('/', (req: Request, res: Response) => {
-  try {
-    logger.info('Received request');
-    res.send('MERN TypeScript Boilerplate');
-  } catch (err) {
-    logger.error(err);
-    res.status(500).send('Something went wrong!');
-  }
-});
+/*
+ * Session Config
+ */
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: SESS_SECRET,
+    cookie: {
+      maxAge: +SESS_LIFETIME,
+      sameSite: true,
+      secure: IN_PROD,
+    },
+  })
+);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port} 🔥`);
+/*
+ * Routes
+ */
+app.use('/api/users', userRouter);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT} 🔥`);
 });
