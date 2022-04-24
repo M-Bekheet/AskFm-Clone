@@ -5,6 +5,7 @@ import cors from 'cors';
 const session = require('express-session');
 import { loggerMdl } from './utils';
 import userRouter from './components/user/router';
+import questionRouter from './components/question/router';
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ app.use(
  * Routes
  */
 app.use('/api/users', userRouter);
+app.use('/api/questions', questionRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT} 🔥`);

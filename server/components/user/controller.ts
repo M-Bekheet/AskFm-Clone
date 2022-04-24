@@ -5,7 +5,7 @@ import { appResponse, logger } from '../../utils';
 
 //!TODO: Add validation to the email
 
-export const createUser: RequestHandler = async (req, res) => {
+const createUser: RequestHandler = async (req, res) => {
   try {
     const { username, password, email, name } = req.body;
 
@@ -35,14 +35,14 @@ export const createUser: RequestHandler = async (req, res) => {
 
     const response = appResponse('User created successfully', true, user);
 
-    res.status(201).json(response);
+    res.status(201).send(response);
   } catch (err) {
     const response = appResponse('Error creating user.', false);
     res.status(500).send(response);
   }
 };
 
-export const loginUser: RequestHandler = async (req, res) => {
+const loginUser: RequestHandler = async (req, res) => {
   try {
     const { password, email } = req.body;
 
@@ -69,7 +69,7 @@ export const loginUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const logoutUser: RequestHandler = async (req, res) => {
+const logoutUser: RequestHandler = async (req, res) => {
   try {
     req.session.destroy((err) => {
       if (err) {
@@ -90,7 +90,7 @@ export const logoutUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const getProfile: RequestHandler = async (req, res) => {
+const getProfile: RequestHandler = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.session.user?.email });
 
@@ -106,7 +106,7 @@ export const getProfile: RequestHandler = async (req, res) => {
   }
 };
 
-export const updateUser: RequestHandler = async (req, res) => {
+const updateUser: RequestHandler = async (req, res) => {
   try {
     const { update } = req.body;
     const userID = req.session.user?.userID;
@@ -139,7 +139,7 @@ export const updateUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const deleteUser: RequestHandler = async (req, res) => {
+const deleteUser: RequestHandler = async (req, res) => {
   try {
     const userID = req.session.user?.userID;
 
@@ -166,4 +166,13 @@ export const deleteUser: RequestHandler = async (req, res) => {
     const response = appResponse('Error deleting user', false);
     res.status(500).send(response);
   }
+};
+
+export {
+  createUser,
+  loginUser,
+  logoutUser,
+  getProfile,
+  updateUser,
+  deleteUser,
 };

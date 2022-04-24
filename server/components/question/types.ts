@@ -11,3 +11,7 @@ export interface IQuestion {
   comments?: IComment[];
   isAnonymous?: boolean;
 }
+
+export interface IAnonymousQuestion extends Omit<IQuestion, 'by'> {
+  by?: 'Anonymous';
+}

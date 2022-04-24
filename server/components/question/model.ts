@@ -6,6 +6,7 @@ const QuestionSchema: Schema = new Schema({
     type: String,
     required: true,
     trim: true,
+    min: 5,
   },
   by: {
     type: Schema.Types.ObjectId,
@@ -31,6 +32,14 @@ const QuestionSchema: Schema = new Schema({
   comments: {
     type: [Schema.Types.ObjectId],
     ref: 'Comment',
+  },
+});
+
+// set `by` property as 'Anonymous' if question is anonymous
+QuestionSchema.set('toJSON', {
+  transform: (doc, ret) => {
+    if (ret.isAnonymous) ret.by = 'Anonymous';
+    return ret;
   },
 });
 

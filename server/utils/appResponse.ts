@@ -1,7 +1,7 @@
-export const appResponse = (msg: string, success: boolean, data?: any) => {
+export const appResponse = (message: string, success: boolean, data?: any) => {
   return {
-    message: msg,
-    success: success,
+    message,
+    success,
     payload: data || {},
   };
 };
