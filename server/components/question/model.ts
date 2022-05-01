@@ -20,6 +20,14 @@ const QuestionSchema: Schema = new Schema({
   answer: {
     type: String,
   },
+  likers: {
+    type: [Schema.Types.ObjectId],
+    ref: 'User',
+  },
+  dislikers: {
+    type: [Schema.Types.ObjectId],
+    ref: 'User',
+  },
   likes: Number,
   createdAt: {
     type: Date,

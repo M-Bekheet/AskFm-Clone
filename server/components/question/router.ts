@@ -4,19 +4,14 @@ import * as controller from './controller';
 
 const router = Router();
 
-router.post('/create/:respondentID', auth, controller.createQuestion);
-router.get('/:id', auth, controller.getQuestion);
 router.get('/', auth, controller.getQuestions);
+router.post('/create/:respondentID', auth, controller.createQuestion);
+router.get('/timeline', auth, controller.getTimelineQuestions); //answered questions only
+router.get('/:id', auth, controller.getQuestion);
 router.delete('/:id', auth, controller.deleteQuestion);
 router.put('/:id', auth, controller.updateQuestion);
-
-/*
-  > TODO: Add routes for:
-    > - Answer a question
-    > - Upvote/Downvote a question
-    > - get all public(answered) questions for users I follow
-    > - get all public(answered) questions for a user profile
-
-*/
+router.patch('/like/:questionID', auth, controller.likeQuestion);
+router.post('/answer/:questionID', auth, controller.answerQuestion);
+router.get('/answered/:userID', controller.getAnsweredQuestions);
 
 export default router;

@@ -5,7 +5,8 @@ export interface IQuestion {
   title: string;
   by: IUser;
   to: IUser;
-  likes?: number;
+  likers?: IUser[];
+  dislikers?: IUser[];
   createdAt?: Date;
   answer?: string;
   comments?: IComment[];
