@@ -37,6 +37,8 @@ const createUser: RequestHandler = async (req, res) => {
 
     res.status(201).send(response);
   } catch (err) {
+    logger.error(err);
+
     const response = appResponse('Error creating user.', false);
     res.status(500).send(response);
   }
@@ -61,6 +63,8 @@ const loginUser: RequestHandler = async (req, res) => {
     req.session.user = { email, userID: user.id };
     res.status(200).send(user);
   } catch (err) {
+    logger.error(err);
+
     const response = appResponse(
       'Something went wrong. Try again later.',
       false
@@ -82,6 +86,8 @@ const logoutUser: RequestHandler = async (req, res) => {
       return res.status(200).send(appResponse('Signed out successfully', true));
     });
   } catch (err) {
+    logger.error(err);
+
     const response = appResponse(
       'Something went wrong. Try again later.',
       false
@@ -101,6 +107,8 @@ const getProfile: RequestHandler = async (req, res) => {
     const response = appResponse('User found', true, user);
     res.status(200).send(response);
   } catch (err) {
+    logger.error(err);
+
     const response = appResponse('Error getting user profile', false);
     res.status(500).send(response);
   }
@@ -126,7 +134,7 @@ const updateUser: RequestHandler = async (req, res) => {
       return res.status(404).send(response);
     }
 
-    const user = await User.findByIdAndUpdate(userID, update);
+    const user = await User.findByIdAndUpdate(userID, update, { new: true });
     if (!user) {
       return res.status(404).send(response);
     }
@@ -134,6 +142,8 @@ const updateUser: RequestHandler = async (req, res) => {
     response = appResponse('User updated successfully', true, user);
     res.status(200).send(response);
   } catch (err) {
+    logger.error(err);
+
     const response = appResponse('Error updating user', false);
     res.status(500).send(response);
   }
@@ -163,7 +173,95 @@ const deleteUser: RequestHandler = async (req, res) => {
     response = appResponse('User deleted successfully', true, user);
     return res.status(200).send(response);
   } catch (err) {
+    logger.error(err);
+
     const response = appResponse('Error deleting user', false);
+    res.status(500).send(response);
+  }
+};
+
+const followUser: RequestHandler = async (req, res) => {
+  try {
+    const userToFollowID = req.params.userID;
+    const userID = req.session.user?.userID;
+    if (!userToFollowID) {
+      const response = appResponse('User to follow is required', false);
+      return res.status(400).send(response);
+    }
+
+    const userToFollow = await User.findByIdAndUpdate(
+      userToFollowID,
+      {
+        $addToSet: { followers: userID },
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!userToFollow) throw new Error();
+
+    const user = await User.findByIdAndUpdate(
+      userID,
+      {
+        $addToSet: { following: userToFollow },
+      },
+      {
+        new: true,
+      }
+    );
+    if (!user) {
+      const response = appResponse('Failed to follow user', false);
+      return res.status(404).send(response);
+    }
+    const response = appResponse('User followed successfully', true, user);
+    return res.status(200).send(response);
+  } catch (err) {
+    logger.error(err);
+
+    const response = appResponse('Error following user', false);
+    res.status(500).send(response);
+  }
+};
+
+const unfollowUser: RequestHandler = async (req, res) => {
+  try {
+    const userToUnFollowID = req.params.userID;
+    const userID = req.session.user?.userID;
+
+    const userToUnFollow = await User.findByIdAndUpdate(
+      userToUnFollowID,
+      {
+        $pull: { followers: userID },
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!userToUnFollow) {
+      const response = appResponse('User to unfollow is required', false);
+      return res.status(400).send(response);
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userID,
+      {
+        $pull: { following: userToUnFollowID },
+      },
+      {
+        new: true,
+      }
+    );
+    if (!user) {
+      const response = appResponse('Failed to unfollow user', false);
+      return res.status(404).send(response);
+    }
+    const response = appResponse('User followed successfully', true, user);
+    return res.status(200).send(response);
+  } catch (err) {
+    logger.error(err);
+    const response = appResponse('Error unfollowing user', false);
     res.status(500).send(response);
   }
 };
@@ -175,4 +273,6 @@ export {
   getProfile,
   updateUser,
   deleteUser,
+  followUser,
+  unfollowUser,
 };
