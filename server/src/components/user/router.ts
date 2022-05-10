@@ -10,5 +10,7 @@ router.post('/logout', controller.logoutUser);
 router.get('/profile', auth, controller.getProfile);
 router.patch('/edit', auth, controller.updateUser);
 router.delete('/delete', auth, controller.deleteUser);
+router.post('/follow/:userID', auth, controller.followUser);
+router.post('/unfollow/:userID', auth, controller.unfollowUser);
 
 export default router;

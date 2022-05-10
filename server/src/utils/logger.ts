@@ -4,7 +4,9 @@ import morgan from 'morgan';
 remove(transports.Console);
 
 const customFormat = format.printf(function (info: any) {
-  return `${info.level}: ${JSON.stringify(info.message, null, 4)}\n`;
+  return `${
+    info.level
+  }: ${JSON.stringify(info.message || info.reason?.message || info, null, 4)}\n`;
 });
 
 const logger = createLogger({
