@@ -343,7 +343,7 @@ const getTimelineQuestions: RequestHandler = async (req, res) => {
     const skip = (page - 1) * limit;
     const questions = await Question.find(
       {
-        by: { $in: [user.following] },
+        by: { $in: user.following },
         limit,
         skip,
       },
@@ -367,6 +367,94 @@ const getTimelineQuestions: RequestHandler = async (req, res) => {
   }
 };
 
+const createComment: RequestHandler = async (req, res) => {
+  try {
+    const { text, isAnonymous = false } = req.body;
+    const by = req.session.user?.userID;
+
+    const comment = { text, by, isAnonymous };
+    const questionID = req.params.questionID;
+
+    const question = await Question.findByIdAndUpdate(
+      questionID,
+      {
+        $push: { comments: comment },
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!question) {
+      const response = appResponse('Error with creating comment', false);
+      return res.status(500).send(response);
+    }
+
+    const response = appResponse(
+      'Comment created successfully',
+      true,
+      question
+    );
+    return res.status(201).send(response);
+  } catch (err) {
+    const response = appResponse('Error with creating comment', false);
+    return res.status(500).send(response);
+  }
+};
+
+const deleteComment: RequestHandler = async (req, res) => {
+  try {
+    const by = req.session.user?.userID!;
+    const questionID = req.params.questionID;
+    const commentID = req.params.commentID;
+
+    if (!questionID || !commentID) {
+      const response = appResponse(
+        'Question and comment ID are required',
+        false
+      );
+      return res.status(400).send(response);
+    }
+
+    const question = await Question.findById(questionID, {
+      _id: 1,
+      comments: 1,
+    });
+
+    if (!question) {
+      const response = appResponse('Question not found', false);
+      return res.status(404).send(response);
+    }
+
+    let isCommentDeleted = false;
+    question.comments = question.comments?.filter((comment) => {
+      if (comment._id.equals(commentID) && comment.by.equals(by)) {
+        isCommentDeleted = true;
+        return false;
+      } else {
+        return true;
+      }
+    });
+
+    if (!isCommentDeleted) {
+      const response = appResponse('Comment not found', false);
+      return res.status(404).send(response);
+    }
+
+    await question.save();
+
+    const response = appResponse(
+      'Comment deleted successfully',
+      true,
+      question
+    );
+    return res.status(200).send(response);
+  } catch (err) {
+    const response = appResponse('Error with deleting comment', false);
+    return res.status(500).send(response);
+  }
+};
+
 export {
   createQuestion,
   getQuestion,
@@ -377,4 +465,6 @@ export {
   answerQuestion,
   getAnsweredQuestions,
   getTimelineQuestions,
+  createComment,
+  deleteComment,
 };

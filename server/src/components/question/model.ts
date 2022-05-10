@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import { IQuestion } from './types';
+import { IQuestion, IComment } from './types';
 
 const QuestionSchema: Schema = new Schema({
   title: {
@@ -28,6 +28,7 @@ const QuestionSchema: Schema = new Schema({
     type: [Schema.Types.ObjectId],
     ref: 'User',
   },
+  //!FIX: Remove likes
   likes: Number,
   createdAt: {
     type: Date,
@@ -37,16 +38,36 @@ const QuestionSchema: Schema = new Schema({
     type: Boolean,
     default: false,
   },
-  comments: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Comment',
-  },
+  comments: [
+    {
+      by: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      text: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      isAnonymous: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
 });
 
-// set `by` property as 'Anonymous' if question is anonymous
+//hide `by` fields property for questions and comments if they are anonymous
 QuestionSchema.set('toJSON', {
   transform: (doc, ret) => {
     if (ret.isAnonymous) ret.by = 'Anonymous';
+
+    if (ret.comments) {
+      ret.comments = ret.comments.map((comment: IComment) => {
+        if (comment.isAnonymous) comment.by = 'Anonymous';
+        return comment;
+      });
+    }
     return ret;
   },
 });
