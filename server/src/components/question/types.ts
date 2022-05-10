@@ -1,11 +1,18 @@
-import { IComment } from '../comment/types';
-import { IUser } from '../user/types';
+import { ObjectId } from 'mongodb';
+
+export interface IComment {
+  _id: ObjectId;
+  by: ObjectId | string;
+  text: string;
+  isAnonymous: boolean;
+}
 
 export interface IQuestion {
   title: string;
-  by: IUser;
-  to: IUser;
-  likes?: number;
+  by: ObjectId;
+  to: ObjectId;
+  likers?: ObjectId[];
+  dislikers?: ObjectId[];
   createdAt?: Date;
   answer?: string;
   comments?: IComment[];

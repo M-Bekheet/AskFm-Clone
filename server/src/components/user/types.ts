@@ -1,6 +1,8 @@
 import { IQuestion } from '../question/types';
+import { ObjectId } from 'mongodb';
 
 export interface IUser {
+  _id?: ObjectId;
   name: string;
   email: string;
   password: string;
