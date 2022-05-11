@@ -428,7 +428,10 @@ const deleteComment: RequestHandler = async (req, res) => {
 
     let isCommentDeleted = false;
     question.comments = question.comments?.filter((comment) => {
-      if (comment._id.equals(commentID) && comment.by.equals(by)) {
+      if (
+        comment._id.equals(commentID) &&
+        (comment.by as mongoose.Types.ObjectId).equals(by)
+      ) {
         isCommentDeleted = true;
         return false;
       } else {
