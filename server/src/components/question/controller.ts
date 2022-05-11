@@ -236,6 +236,12 @@ const likeQuestion: RequestHandler = async (req, res) => {
         }
       );
     }
+
+    if (!question) {
+      const response = appResponse('Question not found', false);
+      return res.status(404).send(response);
+    }
+
     const response = appResponse(
       'Question updated successfully',
       true,
@@ -427,7 +433,7 @@ const deleteComment: RequestHandler = async (req, res) => {
     }
 
     let isCommentDeleted = false;
-    question.comments = question.comments?.filter((comment) => {
+    question.comments = question.comments!.filter((comment) => {
       if (
         comment._id.equals(commentID) &&
         (comment.by as mongoose.Types.ObjectId).equals(by)
