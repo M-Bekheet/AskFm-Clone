@@ -20,7 +20,7 @@
     "express",
     "mongodb"
   ],
-  "author": "Mahmoud Bekheet",
+  "author": "Mahmoud Bekheet & Mohamed El-Bashar",
   "license": "BSD 3-Clause",
   "devDependencies": {
     "concurrently": "^7.1.0"
