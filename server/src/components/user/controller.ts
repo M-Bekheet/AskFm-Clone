@@ -61,7 +61,8 @@ const loginUser: RequestHandler = async (req, res) => {
     }
 
     req.session.user = { email, userID: user.id };
-    res.status(200).send(user);
+    const response = appResponse('User logged in successfully', true, user);
+    res.status(200).send(response);
   } catch (err) {
     logger.error(err);
 

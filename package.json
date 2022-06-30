@@ -10,6 +10,8 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start-client": "cd client && npm run start",
     "start-server": "cd server && npm run start",
+    "dev-client": "cd client && npm run dev",
+    "dev-server": "cd server && npm run dev",
     "start": "npm run build && concurrently \"npm run start-server\" \"npm run start-client\""
   },
   "keywords": [
