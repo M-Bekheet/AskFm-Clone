@@ -8,7 +8,7 @@
     "start": "node dist/index.js",
     "dev": "concurrently \"npx tsc --watch \" \"nodemon -q dist/index.js\""
   },
-  "author": "Mahmoud Bekheet",
+  "author": "Mahmoud Bekheet & Mohamed El-Bashar",
   "engines": {
     "npm": ">=7.18.1",
     "node": ">=16.4.0"
