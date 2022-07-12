@@ -1,3 +1,3 @@
 export { userReducer } from './user.reducer';
 
-export { login } from './user.actions';
+export { login, register } from './user.actions';

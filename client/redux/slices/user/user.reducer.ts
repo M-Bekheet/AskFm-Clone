@@ -1,8 +1,8 @@
-import { UserActionsTypes } from './user.types';
+import { UserActionsTypes, IUser } from './user.types';
 
 const initialState = {
   isAuth: false,
-  details: {},
+  userDetails: {} as IUser,
   isLoading: false,
   error: null,
 };
@@ -10,9 +10,10 @@ const initialState = {
 export const userReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case UserActionsTypes.LOGIN:
+    case UserActionsTypes.REGISTER:
       return {
         ...initialState,
-        details: action.payload,
+        userDetails: action.payload.payload,
         isAuth: true,
         error: null,
       };
