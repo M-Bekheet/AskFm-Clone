@@ -8,7 +8,6 @@ const initialState = {
 };
 
 export const userReducer = (state = initialState, action: any) => {
-  console.log({ action, state });
   switch (action.type) {
     case UserActionsTypes.LOGIN:
       return {
