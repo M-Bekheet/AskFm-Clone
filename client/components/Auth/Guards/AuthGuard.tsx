@@ -1,4 +1,4 @@
-import { useSelector } from '../../../redux/store';
+import { useAppSelector } from '../../../redux/store';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { paths } from '../../../constants';
@@ -8,7 +8,7 @@ type Props = { children: JSX.Element };
 const AuthGuard = ({ children }: Props) => {
   const router = useRouter();
 
-  const isAuth = useSelector((state) => state.user.isAuth);
+  const isAuth = useAppSelector((state) => state.user.isAuth);
 
   useEffect(() => {
     if (

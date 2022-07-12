@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useRegister from './hooks/useRegister';
-import { useSelector } from '../../../../redux/store';
+import { useAppSelector } from '../../../../redux/store';
 
 // type HandleChange: ChangeEventHandler = ({ target }) => void;
 
@@ -17,7 +17,7 @@ export default function RegisterForm() {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
 
-  const isLoading = useSelector((state) => state.user.isLoading);
+  const isLoading = useAppSelector((state) => state.user.isLoading);
 
   const { submitHandler } = useRegister({
     email,

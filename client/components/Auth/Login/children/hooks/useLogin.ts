@@ -1,4 +1,4 @@
-import { useDispatch } from '../../../../../redux/store';
+import { useAppDispatch } from '../../../../../redux/store';
 import { login } from '../../../../../redux/slices/user';
 import React from 'react';
 
@@ -12,7 +12,7 @@ type SubmitHandler = (
 ) => Promise<void> | void;
 
 const useLogin = ({ email, password }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const submitHandler: SubmitHandler = (e) => {
     e.preventDefault();

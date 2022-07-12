@@ -30,6 +30,7 @@ export function login({ email, password }: LoginCredentials) {
     }
   };
 }
+
 export function register({
   email,
   password,
@@ -51,6 +52,22 @@ export function register({
       dispatch({
         type: UserActionsTypes.REGISTER,
         payload: res.data,
+      });
+    } catch (err) {
+      console.error({ err });
+      dispatch({
+        type: UserActionsTypes.HAS_ERROR,
+        payload: err,
+      });
+    }
+  };
+}
+
+export function logout() {
+  return () => {
+    try {
+      dispatch({
+        type: UserActionsTypes.LOGOUT,
       });
     } catch (err) {
       console.error({ err });
