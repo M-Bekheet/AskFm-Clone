@@ -7,14 +7,16 @@ import TextField from '@mui/material/TextField';
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useLogin from './hooks/useLogin';
+import { useSelector } from '../../../../redux/store';
 
 // type HandleChange: ChangeEventHandler = ({ target }) => void;
 
 export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const isLoading = useSelector((state) => state.user.isLoading);
 
-  const { submitHandler, isSubmitting }: any = useLogin({
+  const { submitHandler } = useLogin({
     email,
     password,
   });
@@ -57,7 +59,7 @@ export default function LoginForm() {
         size="large"
         type="submit"
         variant="contained"
-        loading={isSubmitting}
+        loading={isLoading}
         sx={{ borderRadius: 3, boxShadow: 'none' }}
       >
         Login

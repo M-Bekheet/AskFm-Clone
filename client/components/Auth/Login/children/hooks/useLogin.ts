@@ -1,24 +1,26 @@
 import { useDispatch } from '../../../../../redux/store';
 import { login } from '../../../../../redux/slices/user';
+import React from 'react';
 
 type Props = {
   email: string;
   password: string;
 };
 
-const useLogin = ({ email, password }: Props): Promise<any> => {
-  let isSubmitting = false;
+type SubmitHandler = (
+  e: React.FormEvent<HTMLFormElement>
+) => Promise<void> | void;
+
+const useLogin = ({ email, password }: Props) => {
   const dispatch = useDispatch();
 
-  const submitHandler = (e: any) => {
+  const submitHandler: SubmitHandler = (e) => {
     e.preventDefault();
     if (email && password) {
-      isSubmitting = true;
       dispatch(login({ email, password }));
-      isSubmitting = false;
     }
   };
-  return { submitHandler, isSubmitting };
+  return { submitHandler };
 };
 
 export default useLogin;
