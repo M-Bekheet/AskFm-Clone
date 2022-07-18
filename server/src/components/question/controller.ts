@@ -22,6 +22,14 @@ const createQuestion: RequestHandler = async (req, res) => {
       return res.status(400).send(response);
     }
 
+    if (to === by) {
+      let response = appResponse(
+        `You can't ask yourself a question here.`,
+        false
+      );
+      return res.status(400).send(response);
+    }
+
     isAnonymous = isAnonymous === true;
     const question = await Question.create({
       title,
@@ -347,20 +355,18 @@ const getTimelineQuestions: RequestHandler = async (req, res) => {
     limit = +limit;
 
     const skip = (page - 1) * limit;
-    const questions = await Question.find(
-      {
-        by: { $in: user.following },
-        limit,
-        skip,
-      },
-      {
-        answer: { $not: { $in: [null, ''] } },
-      }
-    ).sort({
-      _id: 1,
-    });
 
-    if (!questions) {
+    const questions = await Question.find({
+      by: { $in: user.following },
+      answer: { $nin: [null, ''] },
+    })
+      .skip(skip)
+      .limit(limit)
+      .sort({
+        _id: 1,
+      });
+
+    if (questions.length === 0) {
       const response = appResponse('Questions not found', false);
       return res.status(404).send(response);
     }
