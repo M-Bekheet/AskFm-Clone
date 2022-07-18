@@ -1,6 +1,6 @@
 import { UserActionsTypes } from './user.types';
-import axios from '../../../utils/axios';
-import { dispatch } from '../../store';
+import axios from 'utils/axios';
+import { dispatch } from 'redux/store';
 
 type LoginCredentials = { email: string; password: string };
 type RegisterCredentials = {

@@ -1,5 +1,5 @@
-import { useAppDispatch } from '../../../../../redux/store';
-import { register } from '../../../../../redux/slices/user';
+import { useAppDispatch } from 'redux/store';
+import { register } from 'redux/slices/user';
 import React from 'react';
 
 type Props = {
