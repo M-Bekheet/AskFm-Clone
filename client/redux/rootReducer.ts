@@ -4,12 +4,29 @@ import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 // slices
 import { userReducer } from './slices/user';
 
-const storage = createWebStorage('local');
+const isClient = typeof window !== 'undefined';
+
+const createNoopStorage = () => {
+  return {
+    getItem(_key: any) {
+      return Promise.resolve(null);
+    },
+    setItem(_key: any, value: any) {
+      return Promise.resolve(value);
+    },
+    removeItem(_key: any) {
+      return Promise.resolve();
+    },
+  };
+};
+
+// avoiding localStorage setup for Next.js server
+const storage = isClient ? createWebStorage('local') : createNoopStorage();
 
 const rootPersistConfig = {
   key: 'root',
-  storage,
   keyPrefix: 'redux-',
+  storage,
   whitelist: [],
 };
 
