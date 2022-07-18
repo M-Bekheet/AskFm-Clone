@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useRegister from './hooks/useRegister';
-import { useAppSelector } from '../../../../redux/store';
+import { useAppSelector } from 'redux/store';
 
 // type HandleChange: ChangeEventHandler = ({ target }) => void;
 

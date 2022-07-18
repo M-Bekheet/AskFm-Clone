@@ -1,7 +1,7 @@
-import { useAppSelector } from '../../../redux/store';
+import { useAppSelector } from 'redux/store';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { paths } from '../../../constants';
+import { paths } from '@constants';
 
 type Props = { children: JSX.Element };
 

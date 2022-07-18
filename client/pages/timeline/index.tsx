@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { useAppSelector, useAppDispatch } from '../../redux/store';
-import { logout } from '../../redux/slices/user/user.actions';
-import { paths } from '../../constants';
+import { useAppSelector, useAppDispatch } from 'redux/store';
+import { logout } from 'redux/slices/user/user.actions';
+import { paths } from '@constants';
 
 const Timeline = () => {
   const [mounted, setMounted] = useState(false);
